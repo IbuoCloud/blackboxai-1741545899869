@@ -9,9 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@prisma/client": "^6.4.1",
     "@shadcn/ui": "^0.0.4",
+    "@types/bcryptjs": "^2.4.6",
+    "bcryptjs": "^3.0.2",
     "framer-motion": "^12.4.10",
     "next": "15.2.1",
+    "next-auth": "^4.24.11",
+    "prisma": "^6.4.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "sqlite3": "^5.1.7"
