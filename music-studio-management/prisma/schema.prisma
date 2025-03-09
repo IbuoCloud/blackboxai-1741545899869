@@ -1,0 +1,61 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Usuario {
+  id            String            @id @default(uuid())
+  nombre        String
+  email         String            @unique
+  password      String
+  rol           String            @default("cliente")
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  sesiones      SesionGrabacion[]
+  reservas      Reserva[]
+}
+
+model SesionGrabacion {
+  id          String    @id @default(uuid())
+  titulo      String
+  descripcion String?
+  fechaInicio DateTime
+  fechaFin    DateTime
+  estado      String    @default("pendiente") // pendiente, confirmada, completada, cancelada
+  usuarioId   String
+  salaId      String
+  usuario     Usuario   @relation(fields: [usuarioId], references: [id])
+  sala        Sala      @relation(fields: [salaId], references: [id])
+  reserva     Reserva?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Sala {
+  id              String            @id @default(uuid())
+  nombre          String
+  descripcion     String?
+  equipamiento    String?
+  precioHora      Float
+  disponible      Boolean           @default(true)
+  sesiones        SesionGrabacion[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+}
+
+model Reserva {
+  id              String          @id @default(uuid())
+  sesionId        String          @unique
+  usuarioId       String
+  estado          String          @default("pendiente") // pendiente, confirmada, cancelada
+  metodoPago      String?
+  totalPago       Float
+  sesion          SesionGrabacion @relation(fields: [sesionId], references: [id])
+  usuario         Usuario         @relation(fields: [usuarioId], references: [id])
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+}
